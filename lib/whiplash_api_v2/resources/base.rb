@@ -37,10 +37,17 @@ module WhiplashApiV2
       def with_error_handling(method, endpoint, options = {})
         response = client.public_send(method, endpoint, options)
 
-        raise WhiplashApiV2::UnauthorizedError if unauthorized?(response)
-        raise WhiplashApiV2::UnknownError if unknown_error?(response)
+        raise WhiplashApiV2::UnauthorizedError, response_error(response) if unauthorized?(response)
+        raise WhiplashApiV2::RecordNotFound, response_error(response) if not_found?(response)
+        raise WhiplashApiV2::UnknownError, response_error(response) if unknown_error?(response)
 
         yield response
+      end
+
+      def response_error(response)
+        response.parsed_response['error'] || response.message
+      rescue StandardError => e
+        [response.message, e.message].join(' | ')
       end
 
       def unauthorized?(response)
@@ -49,6 +56,10 @@ module WhiplashApiV2
 
       def unknown_error?(response)
         response.code != 200
+      end
+
+      def not_found?(response)
+        response.code == 404
       end
     end
   end

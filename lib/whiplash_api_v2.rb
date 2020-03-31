@@ -5,6 +5,7 @@ require 'whiplash_api_v2/exceptions'
 
 require 'whiplash_api_v2/resources/base'
 require 'whiplash_api_v2/resources/order'
+require 'whiplash_api_v2/resources/order_item'
 require 'whiplash_api_v2/resources/item'
 
 require 'whiplash_api_v2/client'

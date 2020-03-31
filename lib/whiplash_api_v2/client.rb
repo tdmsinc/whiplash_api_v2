@@ -16,7 +16,7 @@ module WhiplashApiV2
       )
     end
 
-    %i[get post].each do |method|
+    %i[get post put].each do |method|
       define_method method do |endpoint, options = {}|
         self.class.public_send(method, endpoint, options)
       end

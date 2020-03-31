@@ -12,6 +12,8 @@ RSpec.describe WhiplashApiV2::Resources::Order do
       .to_return(status: status, body: fixture(:records))
     stub_request(:get, "#{base_uri}/orders/1")
       .to_return(status: status, body: fixture(:record))
+    stub_request(:put, "#{base_uri}/orders/1/call/pause")
+      .to_return(status: status, body: fixture(:record))
   end
 
   it { expect(resource.count).to eq 52 }
@@ -47,11 +49,28 @@ RSpec.describe WhiplashApiV2::Resources::Order do
     end
   end
 
+  context 'when record not found' do
+    let(:status) { 404 }
+
+    it 'raises exception' do
+      expect { resource.count }.to raise_error WhiplashApiV2::RecordNotFound
+    end
+  end
+
   context 'when endpoint not defined' do
     before { allow(described_class).to receive(:endpoint) }
 
     it 'raises exception' do
       expect { resource.all }.to raise_error WhiplashApiV2::EndpointNotDefined
+    end
+  end
+
+  describe '#call_action' do
+    let(:call_action) { resource.call_action(1, :pause) }
+
+    it 'calls cancel action on order' do
+      expect(call_action).to be_a Hash
+      expect(call_action).to have_key('id')
     end
   end
 end
