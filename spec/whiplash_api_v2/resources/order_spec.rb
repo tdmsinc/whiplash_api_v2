@@ -14,6 +14,8 @@ RSpec.describe WhiplashApiV2::Resources::Order do
       .to_return(status: status, body: fixture(:record))
     stub_request(:put, "#{base_uri}/orders/1/call/pause")
       .to_return(status: status, body: fixture(:record))
+    stub_request(:post, "#{base_uri}/orders")
+      .to_return(status: status, body: fixture(:record))
   end
 
   it { expect(resource.count).to eq 52 }
@@ -71,6 +73,19 @@ RSpec.describe WhiplashApiV2::Resources::Order do
     it 'calls cancel action on order' do
       expect(call_action).to be_a Hash
       expect(call_action).to have_key('id')
+    end
+  end
+
+  describe '#create' do
+    it { expect(resource.create({})).to be_a Hash }
+
+    context 'when status code is not equal to 201' do
+      let(:status) { 422 }
+
+      it 'raises exception' do
+        expect { resource.create({}) }
+          .to raise_error WhiplashApiV2::UnknownError
+      end
     end
   end
 end

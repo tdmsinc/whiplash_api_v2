@@ -32,6 +32,10 @@ module WhiplashApiV2
         with_error_handling(:get, "#{endpoint}/#{id}", &:parsed_response)
       end
 
+      def create(attributes = {})
+        with_error_handling(:post, endpoint, attributes, &:parsed_response)
+      end
+
       private
 
       def with_error_handling(method, endpoint, options = {})
@@ -55,7 +59,7 @@ module WhiplashApiV2
       end
 
       def unknown_error?(response)
-        response.code != 200
+        ![200, 201].include? response.code
       end
 
       def not_found?(response)
