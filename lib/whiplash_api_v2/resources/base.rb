@@ -33,7 +33,7 @@ module WhiplashApiV2
       end
 
       def create(attributes = {})
-        with_error_handling(:post, endpoint, attributes, &:parsed_response)
+        with_error_handling(:post, endpoint, body: attributes, &:parsed_response)
       end
 
       private
