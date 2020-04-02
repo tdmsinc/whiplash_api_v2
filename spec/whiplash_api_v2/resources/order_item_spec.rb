@@ -10,6 +10,8 @@ RSpec.describe WhiplashApiV2::Resources::OrderItem do
       .to_return(status: status, body: fixture(:records))
     stub_request(:get, "#{base_uri}/order_items/1")
       .to_return(status: status, body: fixture(:record))
+    stub_request(:put, "#{base_uri}/order_items/1")
+      .to_return(status: status, body: fixture(:record))
   end
 
   it 'returns order items' do
@@ -22,5 +24,9 @@ RSpec.describe WhiplashApiV2::Resources::OrderItem do
 
   it 'finds the order item' do
     expect(resource.find(1)).to be_a Hash
+  end
+
+  it 'updates the record' do
+    expect(resource.update(1, {})).to be_a Hash
   end
 end

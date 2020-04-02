@@ -16,6 +16,8 @@ RSpec.describe WhiplashApiV2::Resources::Order do
       .to_return(status: status, body: fixture(:record))
     stub_request(:post, "#{base_uri}/orders")
       .to_return(status: status, body: fixture(:record))
+    stub_request(:put, "#{base_uri}/orders/1")
+      .to_return(status: status, body: fixture(:record))
   end
 
   it { expect(resource.count).to eq 52 }
@@ -74,6 +76,10 @@ RSpec.describe WhiplashApiV2::Resources::Order do
       expect(call_action).to be_a Hash
       expect(call_action).to have_key('id')
     end
+  end
+
+  it 'updates the record' do
+    expect(resource.update(1, {})).to be_a Hash
   end
 
   describe '#create' do

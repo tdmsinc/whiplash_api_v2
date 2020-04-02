@@ -36,6 +36,10 @@ module WhiplashApiV2
         with_error_handling(:post, endpoint, body: attributes, &:parsed_response)
       end
 
+      def update(id, attributes = {})
+        with_error_handling(:put, "#{endpoint}/#{id}", body: attributes, &:parsed_response)
+      end
+
       private
 
       def with_error_handling(method, endpoint, options = {})

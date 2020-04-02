@@ -14,6 +14,8 @@ RSpec.describe WhiplashApiV2::Resources::Item do
       .to_return(status: status, body: fixture(:record))
     stub_request(:post, "#{base_uri}/items")
       .to_return(status: status, body: fixture(:record))
+    stub_request(:put, "#{base_uri}/items/1")
+      .to_return(status: status, body: fixture(:record))
   end
 
   it { expect(resource.count).to eq 52 }
@@ -28,6 +30,10 @@ RSpec.describe WhiplashApiV2::Resources::Item do
 
   it 'finds the item' do
     expect(resource.find(1)).to be_a Hash
+  end
+
+  it 'updates the record' do
+    expect(resource.update(1, {})).to be_a Hash
   end
 
   describe '#create' do
