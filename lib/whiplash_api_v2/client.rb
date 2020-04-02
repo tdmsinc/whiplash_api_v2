@@ -9,10 +9,11 @@ module WhiplashApiV2
     def initialize(access_token, options = {})
       @access_token = access_token
       @options = options
+      custom_headers = options[:headers] || {}
 
       self.class.default_options.merge!(
         base_uri: api_url,
-        headers: { 'Authorization' => "Bearer #{access_token}" }
+        headers: { 'Authorization' => "Bearer #{access_token}" }.merge(custom_headers)
       )
     end
 
