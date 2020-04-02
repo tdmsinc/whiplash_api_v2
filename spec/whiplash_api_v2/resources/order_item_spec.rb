@@ -12,7 +12,7 @@ RSpec.describe WhiplashApiV2::Resources::OrderItem do
       .to_return(status: status, body: fixture(:record))
   end
 
-  it 'returns orders' do
+  it 'returns order items' do
     expect(resource.all(1)).to be_any
 
     resource.all(1).each do |record|
@@ -20,7 +20,7 @@ RSpec.describe WhiplashApiV2::Resources::OrderItem do
     end
   end
 
-  it 'finds the order' do
+  it 'finds the order item' do
     expect(resource.find(1)).to be_a Hash
   end
 end
