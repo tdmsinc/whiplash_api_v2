@@ -22,6 +22,14 @@ module WhiplashApiV2
         with_error_handling(:get, endpoint, query: options, &:parsed_response)
       end
 
+      def where(options = {})
+        attrs = options.each_with_object({}) do |(key, value), hash|
+          hash["#{key}_eq"] = value
+        end
+
+        all(search: attrs.to_json)
+      end
+
       def count(options = {})
         with_error_handling(:get, "#{endpoint}/count", query: options) do |res|
           res.parsed_response['count']

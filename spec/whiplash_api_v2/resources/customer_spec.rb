@@ -10,6 +10,9 @@ RSpec.describe WhiplashApiV2::Resources::Customer do
       .to_return(status: status, body: fixture(:records_count))
     stub_request(:get, "#{base_uri}/customers")
       .to_return(status: status, body: fixture(:records))
+    stub_request(:get, "#{base_uri}/customers")
+      .with(query: { search: { id_eq: 1 }.to_json })
+      .to_return(status: status, body: fixture(:records))
     stub_request(:get, "#{base_uri}/customers/1")
       .to_return(status: status, body: fixture(:record))
     stub_request(:post, "#{base_uri}/customers")
@@ -24,6 +27,14 @@ RSpec.describe WhiplashApiV2::Resources::Customer do
     expect(resource.all).to be_any
 
     resource.all.each do |record|
+      expect(record).to be_a Hash
+    end
+  end
+
+  it 'returns records' do
+    expect(resource.where(id: 1)).to be_any
+
+    resource.where(id: 1).each do |record|
       expect(record).to be_a Hash
     end
   end
