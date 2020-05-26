@@ -61,9 +61,14 @@ module WhiplashApiV2
       end
 
       def response_error(response)
-        response.parsed_response['error'] || response.message
+        {
+          error: [response.parsed_response, response.message].compact.join(' | '),
+          requested_url: response.request.last_uri,
+          request_options: response.request.options,
+          status: response.code
+        }.to_json
       rescue StandardError => e
-        [response.message, e.message].join(' | ')
+        [response.body, response.message, e.message].compact.join(' | ')
       end
 
       def unauthorized?(response)
