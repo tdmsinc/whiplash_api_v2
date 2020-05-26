@@ -64,7 +64,7 @@ module WhiplashApiV2
         {
           error: [response.parsed_response, response.message].compact.join(' | '),
           requested_url: response.request.last_uri,
-          request_options: response.request.options,
+          request_options: response.request.options.slice(:headers, :base_uri, :body),
           status: response.code
         }.to_json
       rescue StandardError => e
