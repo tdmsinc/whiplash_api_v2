@@ -55,6 +55,7 @@ module WhiplashApiV2
 
         raise WhiplashApiV2::UnauthorizedError, response_error(response) if unauthorized?(response)
         raise WhiplashApiV2::RecordNotFound, response_error(response) if not_found?(response)
+        raise WhiplashApiV2::ConflictError, response_error(response) if conflict?(response)
         raise WhiplashApiV2::UnknownError, response_error(response) if unknown_error?(response)
 
         yield response
@@ -81,6 +82,10 @@ module WhiplashApiV2
 
       def not_found?(response)
         response.code == 404
+      end
+
+      def conflict?(response)
+        response.code == 409
       end
     end
   end

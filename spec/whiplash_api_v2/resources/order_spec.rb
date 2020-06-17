@@ -72,6 +72,14 @@ RSpec.describe WhiplashApiV2::Resources::Order do
     end
   end
 
+  context 'with conflict' do
+    let(:status) { 409 }
+
+    it 'raises exception' do
+      expect { resource.count }.to raise_error WhiplashApiV2::ConflictError
+    end
+  end
+
   context 'when endpoint not defined' do
     before { allow(described_class).to receive(:endpoint) }
 
