@@ -23,13 +23,14 @@ module WhiplashApiV2
       end
 
       def where(options = {})
+        pagination = options.delete(:pagination) || {}
         attrs = options.each_with_object({}) do |(key, value), hash|
           next hash["#{key}_eq"] = value unless value.is_a? Array
 
           hash["#{key}_in"] = value
         end
 
-        all(search: attrs.to_json)
+        all(pagination.merge(search: attrs.to_json))
       end
 
       def count(options = {})
