@@ -13,6 +13,9 @@ RSpec.describe WhiplashApiV2::Resources::Order do
     stub_request(:get, "#{base_uri}/orders")
       .with(query: { search: { id_eq: 1 }.to_json })
       .to_return(status: status, body: fixture(:records))
+    stub_request(:get, "#{base_uri}/orders")
+      .with(query: { search: { id_in: [1] }.to_json })
+      .to_return(status: status, body: fixture(:records))
     stub_request(:get, "#{base_uri}/orders/1")
       .to_return(status: status, body: fixture(:record))
     stub_request(:put, "#{base_uri}/orders/1/call/pause")
@@ -37,6 +40,14 @@ RSpec.describe WhiplashApiV2::Resources::Order do
     expect(resource.where(id: 1)).to be_any
 
     resource.where(id: 1).each do |record|
+      expect(record).to be_a Hash
+    end
+  end
+
+  it 'returns records' do
+    expect(resource.where(id: 1)).to be_any
+
+    resource.where(id: [1]).each do |record|
       expect(record).to be_a Hash
     end
   end

@@ -24,7 +24,9 @@ module WhiplashApiV2
 
       def where(options = {})
         attrs = options.each_with_object({}) do |(key, value), hash|
-          hash["#{key}_eq"] = value
+          next hash["#{key}_eq"] = value unless value.is_a? Array
+
+          hash["#{key}_in"] = value
         end
 
         all(search: attrs.to_json)
